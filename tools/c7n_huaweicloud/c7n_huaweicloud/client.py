@@ -165,7 +165,7 @@ from huaweicloudsdkas.v1 import (
 from huaweicloudsdkas.v1.region.as_region import AsRegion
 from huaweicloudsdkelb.v2 import ElbClient as ElbClientV2
 from huaweicloudsdkelb.v2.region.elb_region import ElbRegion as ElbRegionV2
-from huaweicloudsdkcodehub.v3 import CodeHubClient, ListCommitsRequest
+from huaweicloudsdkcodehub.v3 import CodeHubClient, ListCommitsRequest, GetAllRepositoryByProjectIdRequest
 from huaweicloudsdkcodehub.v3.region.codehub_region import CodeHubRegion
 
 
@@ -600,7 +600,7 @@ class Session:
                 .with_region(AsRegion.value_of(self.region))
                 .build()
             )
-        elif service in ['codehub-commit']:
+        elif service in ['codeartsrepo-repository']:
             client = (
                 CodeHubClient.new_builder()
                 .with_credentials(credentials)
@@ -790,8 +790,8 @@ class Session:
             request = ListScalingConfigsRequest()
         elif service == 'as-policy':
             request = ListAllScalingV2PoliciesRequest()
-        elif service == "codehub-commit":
-            request = ListCommitsRequest()
+        elif service == "codeartsrepo-repository":
+            request = GetAllRepositoryByProjectIdRequest(project_uuid="f3754a7faff44f7e92e10caa4cf7ca0c")
         return request
 
 

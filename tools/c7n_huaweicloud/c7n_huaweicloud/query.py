@@ -89,6 +89,8 @@ class ResourceQuery:
                 resources = self._pagination_limit_page(m, enum_op, path)
             elif pagination == "cdn":
                 resources = self._pagination_cdn(m, enum_op, path)
+            elif pagination == "pagesize":
+                resources = self._pagination_limit_pagesize(m, enum_op, path, limit)
             else:
                 log.exception(f"Unsupported pagination type: {pagination}")
                 sys.exit(1)
@@ -453,6 +455,40 @@ class ResourceQuery:
 
             resources = resources + res
             page += 1
+        return resources
+
+
+    def _pagination_limit_pagesize(self, m, enum_op, path, limit):
+        session = local_session(self.session_factory)
+        client = session.client(m.service)
+
+        offset = 1
+        resources = []
+        while 1:
+            request = session.request(m.service)
+            request.limit = limit
+            request.offset = offset
+            response = self._invoke_client_enum(client, enum_op, request)
+            res = jmespath.search(
+                path,
+                eval(
+                    str(response)
+                    .replace("null", "None")
+                    .replace("false", "False")
+                    .replace("true", "True")
+                ),
+            )
+            res = json.loads(str(res).replace("'", '"'))
+
+            if path == "*":
+                resources.append(json.loads(str(response)))
+                return resources
+
+            resources = resources + res
+            if len(res) == limit:
+                offset += limit
+            else:
+                return resources
         return resources
 
 

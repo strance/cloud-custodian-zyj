@@ -86,5 +86,5 @@ ResourceMap = {
     "huaweicloud.as-group": "c7n_huaweicloud.resources.as.AsGroup",
     "huaweicloud.as-config": "c7n_huaweicloud.resources.as.AsConfig",
     "huaweicloud.as-policy": "c7n_huaweicloud.resources.as.AsPolicy",
-    "huaweicloud.codehub-commit": "c7n_huaweicloud.resources.codehub.CodehubCommit"
+    "huaweicloud.codeartsrepo-repository": "c7n_huaweicloud.resources.codeartsrepo.CodeaArtsRepoRepository"
 }
