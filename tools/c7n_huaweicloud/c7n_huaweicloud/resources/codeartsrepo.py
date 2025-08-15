@@ -15,7 +15,7 @@ log = logging.getLogger("custodian.huaweicloud.resources.codeartsrepo-repository
 class CodeaArtsRepoRepository(QueryResourceManager):
     class resource_type(TypeInfo):
         service = "codeartsrepo-repository"
-        enum_spec = ("get_all_repository_by_project_id", "result.repositorys", "pagesize", 10)
+        enum_spec = ("list_user_all_repositories", "result.repositories", "repo-repositories", 10)
         id = "id"
 
 
@@ -63,15 +63,16 @@ class CodeaArtsRepoRepositoryOpenWaterMark(HuaweiCloudBaseAction):
         log.info("codehub perform_action request [%s]", request)
         try:
             log.info("codehub perform_action before request.")
-            response = client.create_commit(request)
-            log.info("codehub perform_action before response [%s].", response)
+            # response = client.create_commit(request)
+            # log.info("codehub perform_action before response [%s].", response)
         except exceptions.ClientRequestException as e:
             log.error("[actions]-{codehub-commit} The resource:[codehub-commit] with request:[%s]"
                       "create codehub-commit failed, cause: "
                       "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
                       request, e.status_code, e.request_id, e.error_code, e.error_msg)
             raise
-        return response
+        return
+        # return response
 
 
 @resources.register("codeartsrepo-watermark")

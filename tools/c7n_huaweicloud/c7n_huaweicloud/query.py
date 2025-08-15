@@ -89,8 +89,8 @@ class ResourceQuery:
                 resources = self._pagination_limit_page(m, enum_op, path)
             elif pagination == "cdn":
                 resources = self._pagination_cdn(m, enum_op, path)
-            elif pagination == "pagesize":
-                resources = self._pagination_limit_pagesize(m, enum_op, path, limit)
+            elif pagination == "repo-repositories":
+                resources = self._pagination_limit_repo_repositories(m, enum_op, path, limit)
             else:
                 log.exception(f"Unsupported pagination type: {pagination}")
                 sys.exit(1)
@@ -458,7 +458,7 @@ class ResourceQuery:
         return resources
 
 
-    def _pagination_limit_pagesize(self, m, enum_op, path, limit):
+    def _pagination_limit_repo_repositories(self, m, enum_op, path, limit):
         session = local_session(self.session_factory)
         client = session.client(m.service)
 
@@ -466,8 +466,9 @@ class ResourceQuery:
         resources = []
         while 1:
             request = session.request(m.service)
-            request.limit = limit
-            request.offset = offset
+            request.page_index = offset
+            request.page_size = limit
+            print(f"request.page_index={request.page_index}, request.page_size={request.page_size}")
             response = self._invoke_client_enum(client, enum_op, request)
             res = jmespath.search(
                 path,
@@ -478,17 +479,20 @@ class ResourceQuery:
                     .replace("true", "True")
                 ),
             )
-            res = json.loads(str(res).replace("'", '"'))
+            print("res:", res)
 
-            if path == "*":
-                resources.append(json.loads(str(response)))
-                return resources
+            res = str(res).replace("'", '"').replace(": False", ': "False"')
+            print("res1:", res)
+            res_json = json.loads(res)
+            print("res2:", res)
 
-            resources = resources + res
-            if len(res) == limit:
-                offset += limit
-            else:
-                return resources
+            if len(res_json) == 0 :
+                break
+
+            resources.extend(res_json)
+            offset += 1
+            print("*" * 20,"offset:", offset)
+
         return resources
 
 
