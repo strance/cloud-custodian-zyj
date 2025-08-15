@@ -468,7 +468,6 @@ class ResourceQuery:
             request = session.request(m.service)
             request.page_index = offset
             request.page_size = limit
-            print(f"request.page_index={request.page_index}, request.page_size={request.page_size}")
             response = self._invoke_client_enum(client, enum_op, request)
             res = jmespath.search(
                 path,
@@ -479,20 +478,13 @@ class ResourceQuery:
                     .replace("true", "True")
                 ),
             )
-            print("res:", res)
-
             res = str(res).replace("'", '"').replace(": False", ': "False"')
-            print("res1:", res)
             res_json = json.loads(res)
-            print("res2:", res)
-
             if len(res_json) == 0 :
                 break
 
             resources.extend(res_json)
             offset += 1
-            print("*" * 20,"offset:", offset)
-
         return resources
 
 
