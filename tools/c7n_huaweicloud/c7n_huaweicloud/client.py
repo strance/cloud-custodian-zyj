@@ -165,7 +165,8 @@ from huaweicloudsdkas.v1 import (
 from huaweicloudsdkas.v1.region.as_region import AsRegion
 from huaweicloudsdkelb.v2 import ElbClient as ElbClientV2
 from huaweicloudsdkelb.v2.region.elb_region import ElbRegion as ElbRegionV2
-
+from huaweicloudsdkprojectman.v4.region.projectman_region import ProjectManRegion
+from huaweicloudsdkprojectman.v4 import ProjectManClient, ListProjectsV4Request
 
 log = logging.getLogger("custodian.huaweicloud.client")
 
@@ -598,6 +599,13 @@ class Session:
                 .with_region(AsRegion.value_of(self.region))
                 .build()
             )
+        elif service == "codeartsrepo-project":
+            client = (
+                ProjectManClient.new_builder()
+                .with_credentials(credentials)
+                .with_region(ProjectManRegion.value_of(self.region))
+                .build()
+            )
         return client
 
     def region_client(self, service, region):
@@ -781,6 +789,8 @@ class Session:
             request = ListScalingConfigsRequest()
         elif service == 'as-policy':
             request = ListAllScalingV2PoliciesRequest()
+        elif service == "codeartsrepo-project":
+            request = ListProjectsV4Request()
         return request
 
 
