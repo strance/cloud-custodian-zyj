@@ -5,6 +5,8 @@ import logging
 import os
 import sys
 
+from huaweicloudsdkcodehub.v3.region.codehub_region import CodeHubRegion
+from huaweicloudsdkcodehub.v4 import CodeHubClient
 from huaweicloudsdkconfig.v1 import ConfigClient, ShowTrackerConfigRequest
 from huaweicloudsdkconfig.v1.region.config_region import ConfigRegion
 from huaweicloudsdkcore.auth.credentials import BasicCredentials, GlobalCredentials
@@ -604,6 +606,13 @@ class Session:
                 ProjectManClient.new_builder()
                 .with_credentials(credentials)
                 .with_region(ProjectManRegion.value_of(self.region))
+                .build()
+            )
+        elif service == "codeartsrepo":
+            client = (
+                CodeHubClient.new_builder()
+                .with_credentials(credentials)
+                .with_region(CodeHubRegion.value_of(self.region))
                 .build()
             )
         return client

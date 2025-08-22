@@ -1,0 +1,59 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - projectman-ext.cn-north-4.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250820T031114Z
+    method: GET
+    uri: https://projectman-ext.cn-north-4.myhuaweicloud.com/v4/projects?limit=100&offset=0
+  response:
+    body:
+      string: '{"projects": [{"project_num_id": 13298542, "project_id": "c2ddc88dfe854f1d9ed5a0b864515e1b",
+        "project_name": "webhook", "description": "", "created_time": 1754915441000,
+        "updated_time": 1754915441000, "project_type": "scrum", "creator": {"user_num_id":
+        1475419, "user_id": "886eccdfa78d4f3ca9e9b89a83ac0470", "user_name": "CodeArtsRepo_dev1",
+        "domain_id": "c0bb9f3d2a164a44837d07eda08051f8", "domain_name": "HIS_codehub_internal_template"}}],
+        "total": 22}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 20 Aug 2025 03:11:14 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESTIME=1755659474643; path=/
+      - HWWAFSESID=3fa24730d76120b4d0; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - ab64ca662247fe4aba83e03ff4d9c6da
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
