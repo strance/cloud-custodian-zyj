@@ -1,0 +1,164 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - projectman-ext.cn-north-4.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250823T053306Z
+    method: GET
+    uri: https://projectman-ext.cn-north-4.myhuaweicloud.com/v4/projects?limit=100&offset=0
+  response:
+    body:
+      string: '{"projects": [{"project_num_id": 13282182, "project_id": "f3754a7faff44f7e92e10caa4cf7ca0c",
+        "project_name": "repo_test", "description": "", "created_time": 1754472952000,
+        "updated_time": 1754472952000, "project_type": "scrum", "creator": {"user_num_id":
+        1475419, "user_id": "886eccdfa78d4f3ca9e9b89a83ac0470", "user_name": "CodeArtsRepo_dev1",
+        "domain_id": "c0bb9f3d2a164a44837d07eda08051f8", "domain_name": "HIS_codehub_internal_template"}}],
+        "total": 22}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 23 Aug 2025 05:33:06 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESID=83c63730e8382879d5; path=/
+      - HWWAFSESTIME=1755927186351; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 98d9a6d46f9f0252faad169871f18070
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - codehub-ext.cn-north-4.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250823T053433Z
+    method: GET
+    uri: https://codehub-ext.cn-north-4.myhuaweicloud.com/v4/projects/f3754a7faff44f7e92e10caa4cf7ca0c/watermark
+  response:
+    body:
+      string: '{"watermark": false, "can_update": true}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 23 Aug 2025 05:34:34 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESTIME=1755927274081; path=/
+      - HWWAFSESID=21dd5736b0c4663f4c; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - e3e2661e792f837d5168b4675dda39d9
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"watermark": true}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19'
+      Content-Type:
+      - application/json
+      Host:
+      - codehub-ext.cn-north-4.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250823T053756Z
+    method: PUT
+    uri: https://codehub-ext.cn-north-4.myhuaweicloud.com/v4/projects/f3754a7faff44f7e92e10caa4cf7ca0c/watermark
+  response:
+    body:
+      string: '{"watermark": true}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 23 Aug 2025 05:37:56 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESTIME=1755927476368; path=/
+      - HWWAFSESID=3375a73a8e29511830; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - a76ca5d95b37bea26bd74ff5d4f74e4e
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+version: 1
