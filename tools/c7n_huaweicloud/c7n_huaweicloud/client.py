@@ -601,6 +601,7 @@ class Session:
                 .with_region(AsRegion.value_of(self.region))
                 .build()
             )
+        # use req api query projects for codeartesrepo.
         elif service == "codeartsrepo-project":
             client = (
                 ProjectManClient.new_builder()
@@ -798,6 +799,7 @@ class Session:
             request = ListScalingConfigsRequest()
         elif service == 'as-policy':
             request = ListAllScalingV2PoliciesRequest()
+        # req api query projects request for codeartsrepo.
         elif service == "codeartsrepo-project":
             request = ListProjectsV4Request()
         return request
