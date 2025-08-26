@@ -267,7 +267,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
         return response
 
 
-@CodeaArtsRepoProject.action_registry.register("set-project-settings")
+@CodeaArtsRepoProject.action_registry.register("set-project-inherit-settings")
 class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
     """ CodeArtsRepo set project settings.
 
@@ -283,12 +283,12 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
               key: id
               value: ${id}
           actions:
-            - type: set-project-settings
+            - type: set-project-inherit-settings
               name: protected_branches
               inherit_mod: force_inherit
 
     """
-    schema = type_schema("set-project-settings", name={'type': 'string'}, inherit_mod={'type': 'string'})
+    schema = type_schema("set-project-inherit-settings", name={'type': 'string'}, inherit_mod={'type': 'string'})
 
     def perform_action(self, resource):
         project_id = resource["id"]

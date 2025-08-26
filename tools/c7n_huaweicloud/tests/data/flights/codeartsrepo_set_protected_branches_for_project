@@ -1,0 +1,177 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - projectman-ext.sa-brazil-1.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250826T021228Z
+    method: GET
+    uri: https://projectman-ext.sa-brazil-1.myhuaweicloud.com/v4/projects?limit=100&offset=0
+  response:
+    body:
+      string: '{"projects": [{"project_num_id": 8967755, "project_id": "a8833a48b02540a2becc254f35b1f21e",
+        "project_name": "custodian_test", "description": "", "created_time": 1756103661000,
+        "updated_time": 1756103661000, "project_type": "scrum", "creator": {"user_num_id":
+        868990, "user_id": "080cfb5e498010d61fc7c01e861ce6a6", "user_name": "hwstaff_intl_codehub",
+        "domain_id": "080cfb5d198025280f00c01e12a4ad40", "domain_name": "hwstaff_intl_codehub"}}],
+        "total": 22}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 26 Aug 2025 02:12:29 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESID=ce9d785b5e7cd41c14; path=/
+      - HWWAFSESTIME=1756174344996; path=/
+      - HWWAFSESTIME=1756174344992; path=/
+      - HWWAFSESID=7ada9a3fd758db8108; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 3c09be274056315d1f6e4a3fa48149c4
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - codehub-ext.sa-brazil-1.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250826T022911Z
+    method: GET
+    uri: https://codehub-ext.sa-brazil-1.myhuaweicloud.com/v4/projects/a8833a48b02540a2becc254f35b1f21e/settings-inherit-cfg
+  response:
+    body:
+      string: '{"body": [{"name": "protected_branches", "inherit_mod": "custom"},
+        {"name": "protected_tags", "inherit_mod": "custom"}, {"name": "push_rules",
+        "inherit_mod": "custom"}, {"name": "e2e_settings", "inherit_mod": "custom"},
+        {"name": "webhook_settings", "inherit_mod": "custom"}, {"name": "merge_requests",
+        "inherit_mod": "custom"}, {"name": "mr_branch_policies", "inherit_mod": "custom"},
+        {"name": "reviews", "inherit_mod": "custom"}, {"name": "repository_settings",
+        "inherit_mod": "custom"}, {"name": "deploy_keys", "inherit_mod": "custom"},
+        {"name": "watermark", "inherit_mod": "custom"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 26 Aug 2025 02:29:12 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESID=4a375731f5e5e9f02b; path=/
+      - HWWAFSESTIME=1756175352427; path=/
+      - HWWAFSESTIME=1756175352430; path=/
+      - HWWAFSESID=33c2d7339cda6db696; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - c879aa4a63001285a7125ba9d4ec5316
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"data": [{"name": "protected_branches", "inherit_mod": "force_inherit"}]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json
+      Host:
+      - codehub-ext.sa-brazil-1.myhuaweicloud.com
+      User-Agent:
+      - huaweicloud-usdk-python/3.0
+      X-Project-Id:
+      - ap-southeat-1
+      X-Sdk-Date:
+      - 20250826T024650Z
+    method: PUT
+    uri: https://codehub-ext.sa-brazil-1.myhuaweicloud.com/v4/projects/a8833a48b02540a2becc254f35b1f21e/settings-inherit-cfg
+  response:
+    body:
+      string: '{"body": [{"name": "protected_branches", "inherit_mod": "force_inherit"}, {"name": "protected_tags", "inherit_mod": "custom"}, {"name": "push_rules", "inherit_mod": "custom"}, {"name": "e2e_settings", "inherit_mod": "custom"}, {"name": "webhook_settings", "inherit_mod": "custom"}, {"name": "merge_requests", "inherit_mod": "custom"}, {"name": "mr_branch_policies", "inherit_mod": "custom"}, {"name": "reviews", "inherit_mod": "custom"}, {"name": "repository_settings", "inherit_mod": "custom"}, {"name": "deploy_keys", "inherit_mod": "custom"}, {"name": "watermark", "inherit_mod": "force_inherit"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 26 Aug 2025 02:46:51 GMT
+      Server:
+      - CloudWAF
+      Set-Cookie:
+      - HWWAFSESID=420c473c10cc7b5aae; path=/
+      - HWWAFSESTIME=1756176411321; path=/
+      - HWWAFSESTIME=1756176411323; path=/
+      - HWWAFSESID=3b5f673e0cd8922544; path=/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains;
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 060b555f0748c17c72833d995578ed82
+      X-XSS-Protection:
+      - 1; mode=block;
+    status:
+      code: 200
+      message: OK
+version: 1
