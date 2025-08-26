@@ -152,6 +152,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
                          merge_user_team_ids={"type": "array"}, merge_related_role_ids={"type": "array"})
 
     def perform_action(self, resource):
+        response = {}
         project_id = resource["id"]
         branch_name = self.data.get("branch_name")
         push_action = self.data.get("push_action")
