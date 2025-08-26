@@ -89,7 +89,7 @@ class CodeArtsRepoTest(BaseTest):
                     {
                         "type": "set-project-inherit-settings",
                         "name": "protected_branches",
-                        "inherit_mod": "force_inherit",
+                        "enable": True,
                     }
                 ],
             },
@@ -117,7 +117,7 @@ class CodeArtsRepoTest(BaseTest):
                     {
                         "type": "set-project-inherit-settings",
                         "name": "watermark",
-                        "inherit_mod": "force_inherit",
+                        "enable": True,
                     }
                 ],
             },

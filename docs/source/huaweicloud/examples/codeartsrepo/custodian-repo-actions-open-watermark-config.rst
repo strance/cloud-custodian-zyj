@@ -23,4 +23,4 @@ CodeArtsRepo - open watermark for project and set project watermark inherit sett
       actions:
         - type: set-project-inherit-settings
           name: "watermark"
-          inherit_mod: "force_inherit"
+          enable: True

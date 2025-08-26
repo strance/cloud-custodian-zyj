@@ -14,7 +14,7 @@ CodeArtsRepo - set project protected branches settings for project
       actions:
        - type: set-project-inherit-settings
          name: "protected_branches"
-         inherit_mod: "force_inherit"
+         enable: True
 
 
 .. code-block:: yaml
@@ -31,7 +31,7 @@ CodeArtsRepo - set project protected branches settings for project
       actions:
        - type: set-project-inherit-settings
          name: "protected_branches"
-         inherit_mod: "force_inherit"
+         enable: True
 
 
 .. code-block:: yaml
@@ -48,4 +48,4 @@ CodeArtsRepo - set project protected branches settings for project
       actions:
        - type: set-project-inherit-settings
          name: "protected_branches"
-         inherit_mod: "force_inherit"
+         enable: True

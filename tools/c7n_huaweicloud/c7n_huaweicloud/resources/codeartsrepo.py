@@ -286,16 +286,20 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
           actions:
             - type: set-project-inherit-settings
               name: protected_branches
-              inherit_mod: force_inherit
+              enable: True
 
     """
-    schema = type_schema("set-project-inherit-settings", name={'type': 'string'}, inherit_mod={'type': 'string'})
+    schema = type_schema("set-project-inherit-settings", name={'type': 'string'}, enable={'type': 'bool'})
 
     def perform_action(self, resource):
         project_id = resource["id"]
         name = self.data.get("name")
-        inherit_mod = self.data.get("inherit_mod")
-        self.verify(name, inherit_mod)
+        enable = self.data.get("enable")
+        if enable:
+            inherit_mod = "force_inherit"
+        else:
+            inherit_mod = "custom"
+        self.verify(name)
 
         settings = self.query_project_settings(project_id)
         setting = self.find_setting_by_name(settings, name)
@@ -330,18 +334,12 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
     def get_codehub_client(self):
         return local_session(self.manager.session_factory).client("codeartsrepo")
 
-    def verify(self, name, inherit_mod):
+    def verify(self, name):
         name_list = ["protected_branches", "watermark"]
-        inherit_mod_list = ["force_inherit", "custom"]
         if name not in name_list:
             log.error("[actions]-{codehub-project-set-settings} verify name: [%s] failed."
                       "name must in [%s].",
                       name, name_list)
-            raise
-        if inherit_mod not in inherit_mod_list:
-            log.error("[actions]-{codehub-project-set-settings} verify inherit_mod: [%s] failed."
-                      " inherit_mod must in [%s].",
-                      inherit_mod, inherit_mod_list)
             raise
 
     def query_project_settings(self, project_id):

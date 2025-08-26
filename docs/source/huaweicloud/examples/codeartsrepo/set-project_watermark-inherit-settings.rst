@@ -14,7 +14,7 @@ CodeArtsRepo - set project watermark settings for project
       actions:
        - type: set-project-inherit-settings
          name: "watermark"
-         inherit_mod: "force_inherit"
+         enable: True
 
 
 .. code-block:: yaml
@@ -31,7 +31,7 @@ CodeArtsRepo - set project watermark settings for project
       actions:
        - type: set-project-inherit-settings
          name: "watermark"
-         inherit_mod: "force_inherit"
+         enable: True
 
 
 .. code-block:: yaml
@@ -48,4 +48,4 @@ CodeArtsRepo - set project watermark settings for project
       actions:
        - type: set-project-inherit-settings
          name: "watermark"
-         inherit_mod: "force_inherit"
+         enable: True

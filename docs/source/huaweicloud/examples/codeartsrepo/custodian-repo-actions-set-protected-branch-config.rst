@@ -34,4 +34,4 @@ CodeArtsRepo - open prtected branches for project and set project prtected branc
       actions:
         - type: set-project-inherit-settings
           name: "protected_branches"
-          inherit_mod: "force_inherit"
+          enable: True
