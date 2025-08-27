@@ -11,7 +11,7 @@ from c7n.utils import type_schema, local_session
 
 from huaweicloudsdkcodehub.v4 import ShowProjectWatermarkRequest, UpdateProjectWatermarkRequest, UpdateWatermarkDto, \
     ListProjectProtectedBranchesRequest, CreateProjectProtectedBranchesRequest, ProtectedBranchBodyApiDto, \
-    ProtectedActionBasicApiDto, ShowProjectSettingsInheritCfgRequest, UpdateProjectSettingsInheritCfgRequest, \
+    ProtectedActionBasicApiDto, UpdateProjectSettingsInheritCfgRequest, \
     SettingsInheritCfgBodyApiDto, ProjectSettingsInheritCfgDto
 from huaweicloudsdkcore.exceptions import exceptions
 
@@ -19,7 +19,7 @@ log = logging.getLogger("custodian.huaweicloud.resources.codeartsrepo-project")
 
 
 @resources.register("codeartsrepo-project")
-class CodeaArtsRepoProject(QueryResourceManager):
+class CodeArtsRepoProject(QueryResourceManager):
     class resource_type(TypeInfo):
         service = "codeartsrepo-project"
         enum_spec = ("list_projects_v4", "projects", "offset")
@@ -27,7 +27,7 @@ class CodeaArtsRepoProject(QueryResourceManager):
         tag_resource_type = "codeartsrepo"
 
 
-@CodeaArtsRepoProject.action_registry.register("open-watermark")
+@CodeArtsRepoProject.action_registry.register("open-watermark")
 class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
     """ CodeArtsRepo open watermark for project.
 
@@ -116,7 +116,7 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
         return response
 
 
-@CodeaArtsRepoProject.action_registry.register("create-protected-branches")
+@CodeArtsRepoProject.action_registry.register("create-protected-branches")
 class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
     """ CodeArtsRepo create protected branches for project.
 
@@ -133,38 +133,24 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
               value: ${id}
           actions:
             - type: create-protected-branches
-              branch_name: *
-              push_action: push
-              push_user_ids: []
-              push_user_team_ids: []
-              push_related_role_ids: []
-              merge_action: merge
-              merge_user_ids: []
-              merge_user_team_ids: []
-              merge_related_role_ids: []
     """
 
-    schema = type_schema("create-protected-branches", branch_name={'type': 'string'}, push_action={'type': 'string'},
-                         push_enable={"type": "boolean"}, push_user_ids={"type": "array"},
-                         push_user_team_ids={"type": "array"}, push_related_role_ids={"type": "array"},
-                         merge_action={'type': 'string'}, merge_enable={"type": "boolean"},
-                         merge_user_ids={"type": "array"},
-                         merge_user_team_ids={"type": "array"}, merge_related_role_ids={"type": "array"})
+    schema = type_schema("create-protected-branches")
 
     def perform_action(self, resource):
         response = {}
         project_id = resource["id"]
-        branch_name = self.data.get("branch_name")
-        push_action = self.data.get("push_action")
-        push_enable = self.data.get("push_enable")
-        push_user_ids = self.data.get("push_user_ids")
-        push_user_team_ids = self.data.get("push_user_team_ids")
-        push_related_role_ids = self.data.get("push_related_role_ids")
-        merge_action = self.data.get("merge_action")
-        merge_enable = self.data.get("merge_enable")
-        merge_user_ids = self.data.get("merge_user_ids")
-        merge_user_team_ids = self.data.get("merge_user_team_ids")
-        merge_related_role_ids = self.data.get("merge_related_role_ids")
+        branch_name = "*"
+        push_action = "push"
+        push_enable = True
+        push_user_ids = []
+        push_user_team_ids = []
+        push_related_role_ids = []
+        merge_action = "merge"
+        merge_enable = True
+        merge_user_ids = []
+        merge_user_team_ids = []
+        merge_related_role_ids = []
 
         try:
             protected_branches = self.query_project_protected_branches(project_id)
@@ -268,7 +254,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
         return response
 
 
-@CodeaArtsRepoProject.action_registry.register("set-project-inherit-settings")
+@CodeArtsRepoProject.action_registry.register("set-project-inherit-settings")
 class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
     """ CodeArtsRepo set project settings.
 
@@ -285,87 +271,51 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
               value: ${id}
           actions:
             - type: set-project-inherit-settings
-              name: protected_branches
-              enable: True
+              protected_branches_enable: True
+              watermark_enable: True
 
     """
-    schema = type_schema("set-project-inherit-settings", name={'type': 'string'}, enable={'type': 'bool'})
+    schema = type_schema("set-project-inherit-settings", protected_branches_enable={'type': 'boolean'},
+                         watermark_enable={'type': 'boolean'})
 
     def perform_action(self, resource):
         project_id = resource["id"]
-        name = self.data.get("name")
-        enable = self.data.get("enable")
-        if enable:
-            inherit_mod = "force_inherit"
-        else:
-            inherit_mod = "custom"
-        self.verify(name)
+        protected_branches_enable = self.data.get("protected_branches_enable")
+        watermark_enable = self.data.get("watermark_enable")
 
-        settings = self.query_project_settings(project_id)
-        setting = self.find_setting_by_name(settings, name)
-        if setting is None:
-            log.error(
-                "[actions]-{codehub-project-set-settings} with project_id: [%s]"
-                "query project settings failed, not found name: [%s], please check your name.",
-                project_id, name)
-            return settings
-        if setting["inherit_mod"] == "force_inherit":
-            log.info(
-                "[actions]-{codehub-project-set-settings} has force_inherit name: [%s] fro project_id: [%s], skip.",
-                name, project_id)
-            return settings
+        if protected_branches_enable:
+            protected_branches_inherit_mod = "force_inherit"
+        else:
+            protected_branches_inherit_mod = "custom"
+        if watermark_enable:
+            watermark_inherit_mod = "force_inherit"
+        else:
+            watermark_inherit_mod = "custom"
+
         list_data_body = [
             ProjectSettingsInheritCfgDto(
-                name=name,
-                inherit_mod=inherit_mod,
+                name="protected_branches",
+                inherit_mod=protected_branches_inherit_mod,
+            ),
+            ProjectSettingsInheritCfgDto(
+                name="watermark",
+                inherit_mod=watermark_inherit_mod,
             )
         ]
         try:
             response = self.set_project_settings(project_id, list_data_body)
             log.info(
-                "[actions]-{codehub-project-set-settings} set settings name: [%s] fro project_id: [%s] success.",
-                name, project_id)
+                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark fro project_id: [%s] success.",
+                project_id)
         except exceptions.ClientRequestException as e:
-            log.error("[actions]-{codehub-project-set-settings} set settings name: [%s] for project_id:[%s] failed.",
-                      name, project_id)
+            log.error(
+                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark for project_id:[%s] failed.",
+                project_id)
             raise
         return response
 
     def get_codehub_client(self):
         return local_session(self.manager.session_factory).client("codeartsrepo")
-
-    def verify(self, name):
-        name_list = ["protected_branches", "watermark"]
-        if name not in name_list:
-            log.error("[actions]-{codehub-project-set-settings} verify name: [%s] failed."
-                      "name must in [%s].",
-                      name, name_list)
-            raise
-
-    def query_project_settings(self, project_id):
-        request = ShowProjectSettingsInheritCfgRequest()
-        request.project_id = project_id
-        try:
-            response = self.get_codehub_client().show_project_settings_inherit_cfg(request)
-            log.info(
-                "[actions]-{codehub-project-set-settings} with project_id: [%s]"
-                "query project settings success, response: [%s]",
-                project_id, response)
-        except exceptions.ClientRequestException as e:
-            log.error(
-                "[actions]-{codehub-project-set-settings} with request:[%s]"
-                "query project settings failed, cause: "
-                "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
-                request, e.status_code, e.request_id, e.error_code, e.error_msg)
-            raise
-        return response
-
-    def find_setting_by_name(self, settings, name):
-        settings = json.loads(str(settings))
-        for setting in settings.get("body"):
-            if setting["name"] == name:
-                return setting
-        return None
 
     def set_project_settings(self, project_id, list_data_body):
         request = UpdateProjectSettingsInheritCfgRequest()

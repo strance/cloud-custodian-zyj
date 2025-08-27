@@ -52,17 +52,6 @@ class CodeArtsRepoTest(BaseTest):
                 "actions": [
                     {
                         "type": "create-protected-branches",
-                        "branch_name": "*",
-                        "push_action": "push",
-                        "push_enable": True,
-                        "push_user_ids": [],
-                        "push_user_team_ids": [],
-                        "push_related_role_ids": [],
-                        "merge_action": "merge",
-                        "merge_enable": True,
-                        "merge_user_ids": [],
-                        "merge_user_team_ids": [],
-                        "merge_related_role_ids": []
                     }
                 ],
             },
@@ -71,12 +60,12 @@ class CodeArtsRepoTest(BaseTest):
         resources = p.run()
         self.assertEqual(resources[0]["project_id"], "a8833a48b02540a2becc254f35b1f21e")
 
-    def test_set_protected_branches_for_project(self):
+    def test_set_project_inherit_settings(self):
         os.environ["HUAWEI_DEFAULT_REGION"] = "sa-brazil-1"
-        factory = self.replay_flight_data("codeartsrepo_set_protected_branches_for_project")
+        factory = self.replay_flight_data("codeartsrepo_set_project_inherit_settings")
         p = self.load_policy(
             {
-                "name": "codeartsrepo_set_protected_branches_for_project",
+                "name": "codeartsrepo_set_project_inherit_settings",
                 "resource": "huaweicloud.codeartsrepo-project",
                 "filters": [
                     {
@@ -88,36 +77,8 @@ class CodeArtsRepoTest(BaseTest):
                 "actions": [
                     {
                         "type": "set-project-inherit-settings",
-                        "name": "protected_branches",
-                        "enable": True,
-                    }
-                ],
-            },
-            session_factory=factory,
-        )
-        resources = p.run()
-        self.assertEqual(resources[0]["project_id"], "a8833a48b02540a2becc254f35b1f21e")
-
-
-    def test_set_watermark_for_project(self):
-        os.environ["HUAWEI_DEFAULT_REGION"] = "sa-brazil-1"
-        factory = self.replay_flight_data("codeartsrepo_set_watermark_for_project")
-        p = self.load_policy(
-            {
-                "name": "codeartsrepo_set_watermark_for_project",
-                "resource": "huaweicloud.codeartsrepo-project",
-                "filters": [
-                    {
-                        "type": "value",
-                        "key": "id",
-                        "value": "a8833a48b02540a2becc254f35b1f21e",
-                    }
-                ],
-                "actions": [
-                    {
-                        "type": "set-project-inherit-settings",
-                        "name": "watermark",
-                        "enable": True,
+                        "protected_branches_enable": True,
+                        "watermark_enable": True
                     }
                 ],
             },
