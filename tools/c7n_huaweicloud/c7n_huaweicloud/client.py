@@ -803,6 +803,8 @@ class Session:
         # req api query projects request for codeartsrepo.
         elif service == "codeartsrepo-project":
             request = ListProjectsV4Request()
+            # list all the projects of this tenant
+            request.query_type = "domain_projects"
         return request
 
 

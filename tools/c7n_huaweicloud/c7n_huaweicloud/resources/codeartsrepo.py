@@ -3,6 +3,7 @@
 
 import json
 import logging
+import time
 
 from c7n_huaweicloud.provider import resources
 from c7n_huaweicloud.query import QueryResourceManager, TypeInfo
@@ -49,6 +50,7 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
     schema = type_schema("open-watermark")
 
     def perform_action(self, resource):
+        time.sleep(1)
         project_id = resource["id"]
         try:
             response = self.query_project_watermark_status(project_id)
@@ -138,6 +140,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
     schema = type_schema("create-protected-branches")
 
     def perform_action(self, resource):
+        time.sleep(1)
         response = {}
         project_id = resource["id"]
         branch_name = "*"
@@ -279,6 +282,7 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
                          watermark_enable={'type': 'boolean'})
 
     def perform_action(self, resource):
+        time.sleep(1)
         project_id = resource["id"]
         protected_branches_enable = self.data.get("protected_branches_enable")
         watermark_enable = self.data.get("watermark_enable")
