@@ -24,7 +24,7 @@ class CodeArtsRepoProject(QueryResourceManager):
         service = "codeartsrepo-project"
         enum_spec = ("list_projects_v4", "projects", "offset")
         id = "project_id"
-        tag_resource_type = "codeartsrepo"
+        tag_resource_type = False
 
 
 @CodeArtsRepoProject.action_registry.register("open-watermark")
