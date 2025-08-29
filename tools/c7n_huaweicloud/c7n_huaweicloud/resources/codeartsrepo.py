@@ -65,7 +65,7 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
             else:
                 can_update = response.get("can_update")
                 if not can_update:
-                    log.error(
+                    log.warning(
                         "[actions]-{codehub-project-open-watermark} no permission open project watermark fro project_id: [%s], skip.",
                         project_id)
                 else:
@@ -347,10 +347,6 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark fro project_id: [%s] success.",
                 project_id)
         except exceptions.ClientRequestException as e:
-            if e.status_code == 403:
-                log.warning(
-                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark")
-                return {}
             log.error(
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark for project_id:[%s] failed.",
                 project_id)
@@ -373,6 +369,10 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
                 "[actions]-{codehub-project-set-settings} with project_id:[%s] "
                 "set project settings success.", project_id)
         except exceptions.ClientRequestException as e:
+            if e.status_code == 403:
+                log.warning(
+                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark")
+                return {}
             log.error(
                 "[actions]-{codehub-project-set-settings} with request:[%s]"
                 "set project settings failed, cause: "
