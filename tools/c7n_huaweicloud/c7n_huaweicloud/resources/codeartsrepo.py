@@ -5,16 +5,16 @@ import json
 import logging
 import time
 
-from c7n_huaweicloud.provider import resources
-from c7n_huaweicloud.query import QueryResourceManager, TypeInfo
-from c7n_huaweicloud.actions.base import HuaweiCloudBaseAction
-from c7n.utils import type_schema, local_session
-
 from huaweicloudsdkcodehub.v4 import ShowProjectWatermarkRequest, UpdateProjectWatermarkRequest, UpdateWatermarkDto, \
     ListProjectProtectedBranchesRequest, CreateProjectProtectedBranchesRequest, ProtectedBranchBodyApiDto, \
     ProtectedActionBasicApiDto, UpdateProjectSettingsInheritCfgRequest, \
     SettingsInheritCfgBodyApiDto, ProjectSettingsInheritCfgDto
 from huaweicloudsdkcore.exceptions import exceptions
+
+from c7n.utils import type_schema, local_session
+from c7n_huaweicloud.actions.base import HuaweiCloudBaseAction
+from c7n_huaweicloud.provider import resources
+from c7n_huaweicloud.query import QueryResourceManager, TypeInfo
 
 log = logging.getLogger("custodian.huaweicloud.resources.codeartsrepo-project")
 
@@ -53,7 +53,9 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
         time.sleep(1)
         project_id = resource["id"]
         try:
-            response = self.query_project_watermark_status(project_id)
+            response, has_permission = self.query_project_watermark_status(project_id)
+            if not has_permission:
+                return {}
             response = json.loads(str(response))
             is_open_watermark = response.get("watermark")
             if is_open_watermark:
@@ -67,7 +69,9 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
                         "[actions]-{codehub-project-open-watermark} no permission open project watermark fro project_id: [%s], skip.",
                         project_id)
                 else:
-                    response = self.open_project_watermark(project_id)
+                    response, has_permission = self.open_project_watermark(project_id)
+                    if not has_permission:
+                        return {}
                     log.info(
                         "[actions]-{codehub-project-open-watermark} open project watermark fro project_id: [%s] success.",
                         project_id)
@@ -89,13 +93,20 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
                 "query project watermark success, response: [%s]",
                 project_id, response)
         except exceptions.ClientRequestException as e:
+            if e.status_code == 403:
+                log.warning(
+                    "[actions]-{codehub-project-open-watermark} with request:[%s]"
+                    "query project watermark no permission, cause: "
+                    "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
+                    request, e.status_code, e.request_id, e.error_code, e.error_msg)
+                return {}, False
             log.error(
                 "[actions]-{codehub-project-open-watermark} with request:[%s]"
                 "query project watermark status failed, cause: "
                 "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
                 request, e.status_code, e.request_id, e.error_code, e.error_msg)
             raise
-        return response
+        return response, True
 
     def open_project_watermark(self, project_id):
         request = UpdateProjectWatermarkRequest()
@@ -109,13 +120,20 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
                 "[actions]-{codehub-project-open-watermark} with project_id:[%s] "
                 "open project watermark success.", project_id)
         except exceptions.ClientRequestException as e:
+            if e.status_code == 403:
+                log.warning(
+                    "[actions]-{codehub-project-open-watermark} with request:[%s]"
+                    "open project watermark no permission, cause: "
+                    "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
+                    request, e.status_code, e.request_id, e.error_code, e.error_msg)
+                return {}, False
             log.error(
                 "[actions]-{codehub-project-open-watermark} with request:[%s]"
                 "open project watermark failed, cause: "
                 "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
                 request, e.status_code, e.request_id, e.error_code, e.error_msg)
             raise
-        return response
+        return response, True
 
 
 @CodeArtsRepoProject.action_registry.register("create-protected-branches")
@@ -156,7 +174,9 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
         merge_related_role_ids = []
 
         try:
-            protected_branches = self.query_project_protected_branches(project_id)
+            protected_branches, has_permission = self.query_project_protected_branches(project_id)
+            if not has_permission:
+                return response
             if not self.need_create_protected_branches(protected_branches):
                 log.info(
                     "[actions]-{codehub-project-create-protected-branches} has protected branches fro project_id: [%s], skip.",
@@ -178,7 +198,9 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
                         related_role_ids=merge_related_role_ids
                     )
                 ]
-                response = self.create_project_protected_branches(project_id, list_actions_body, branch_name)
+                response, has_permission = self.create_project_protected_branches(project_id, list_actions_body, branch_name)
+                if not has_permission:
+                    return response
                 log.info(
                     "[actions]-{codehub-project-create-protected-branches} create protected branches fro project_id: [%s] success.",
                     project_id)
@@ -192,10 +214,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
 
     def need_create_protected_branches(self, protected_branches):
         if len(protected_branches) > 0:
-            for branch in protected_branches:
-                if branch.get("name") == "*":
-                    return False
-            return True
+            return False
         else:
             return True
 
@@ -226,35 +245,51 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
                     break
                 offset += limit
             except exceptions.ClientRequestException as e:
+                if e.status_code == 403:
+                    # user has no permission to process
+                    log.warning(
+                        "[actions]-{codehub-project-create-protected-branches} with request:[%s]"
+                        "query project protected branches no permission, cause: "
+                        "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
+                        request, e.status_code, e.request_id, e.error_code, e.error_msg)
+                    return [], False
                 log.error(
                     "[actions]-{codehub-project-create-protected-branches} with request:[%s]"
                     "query project protected branches failed, cause: "
                     "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
                     request, e.status_code, e.request_id, e.error_code, e.error_msg)
                 raise
-        return protected_branches
+        return protected_branches, True
 
     def create_project_protected_branches(self, project_id, list_actions_body, branch_name):
         request = CreateProjectProtectedBranchesRequest()
         request.project_id = project_id
-
         request.body = ProtectedBranchBodyApiDto(
             actions=list_actions_body,
             name=branch_name
         )
+
         try:
             response = self.get_codehub_client().create_project_protected_branches(request)
             log.info(
                 "[actions]-{codehub-project-create-protected-branches} with project_id:[%s] "
                 "create project protected branches success.", project_id)
         except exceptions.ClientRequestException as e:
+            if e.status_code == 403:
+                # user has no permission to process
+                log.warning(
+                    "[actions]-{codehub-project-create-protected-branches} with request:[%s]"
+                    "create project protected branches no permission, cause: "
+                    "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
+                    request, e.status_code, e.request_id, e.error_code, e.error_msg)
+                return [], False
             log.error(
                 "[actions]-{codehub-project-create-protected-branches} with request:[%s]"
                 "create project protected branches failed, cause: "
                 "status_code[%s] request_id[%s] error_code[%s] error_msg[%s]",
                 request, e.status_code, e.request_id, e.error_code, e.error_msg)
             raise
-        return response
+        return response, True
 
 
 @CodeArtsRepoProject.action_registry.register("set-project-inherit-settings")
@@ -312,6 +347,10 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark fro project_id: [%s] success.",
                 project_id)
         except exceptions.ClientRequestException as e:
+            if e.status_code == 403:
+                log.warning(
+                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark")
+                return {}
             log.error(
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark for project_id:[%s] failed.",
                 project_id)
