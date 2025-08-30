@@ -430,7 +430,7 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
         except exceptions.ClientRequestException as e:
             if e.status_code == 403:
                 log.warning(
-                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark")
+                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark with request:[%s]", request)
                 return {}
             log.error(
                 "[actions]-{codehub-project-set-settings} with request:[%s]"
