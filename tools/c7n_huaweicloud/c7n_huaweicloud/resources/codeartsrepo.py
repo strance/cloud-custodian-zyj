@@ -5,17 +5,18 @@ import json
 import logging
 import time
 
-from huaweicloudsdkcodehub.v4 import ShowProjectWatermarkRequest, UpdateProjectWatermarkRequest, UpdateWatermarkDto, \
-    ListProjectProtectedBranchesRequest, CreateProjectProtectedBranchesRequest, ProtectedBranchBodyApiDto, \
-    ProtectedActionBasicApiDto, UpdateProjectSettingsInheritCfgRequest, \
-    SettingsInheritCfgBodyApiDto, ProjectSettingsInheritCfgDto
+from huaweicloudsdkcodehub.v4 import (ShowProjectWatermarkRequest, UpdateProjectWatermarkRequest, \
+                                      UpdateWatermarkDto, ListProjectProtectedBranchesRequest, \
+                                      CreateProjectProtectedBranchesRequest, ProtectedBranchBodyApiDto, \
+                                      ProtectedActionBasicApiDto, UpdateProjectSettingsInheritCfgRequest, \
+                                      SettingsInheritCfgBodyApiDto, ProjectSettingsInheritCfgDto)
 from huaweicloudsdkcore.exceptions import exceptions
 
+from c7n.filters import Filter
 from c7n.utils import type_schema, local_session
 from c7n_huaweicloud.actions.base import HuaweiCloudBaseAction
 from c7n_huaweicloud.provider import resources
 from c7n_huaweicloud.query import QueryResourceManager, TypeInfo
-from c7n.filters import Filter
 
 log = logging.getLogger("custodian.huaweicloud.resources.codeartsrepo-project")
 
@@ -58,15 +59,15 @@ class WatermarkFilter(Filter):
             is_open_watermark = response.get("watermark")
             if is_open_watermark:
                 log.info(
-                    "[filters]-{codehub-project-filter-watermark} watermark of project_id: [%s] already opened, skip.",
-                    project_id)
+                    "[filters]-{codehub-project-filter-watermark} watermark of project_id: [%s] "
+                    "already opened, skip.", project_id)
                 continue
             # can not update
             can_update = response.get("can_update")
             if not can_update:
                 log.warning(
-                    "[filters]-{codehub-project-filter-watermark} no permission open project watermark fro project_id: [%s], skip.",
-                    project_id)
+                    "[filters]-{codehub-project-filter-watermark} no permission open project watermark "
+                    "for project_id: [%s], skip.", project_id)
                 continue
             results.append(resource)
         return results
@@ -98,6 +99,7 @@ class WatermarkFilter(Filter):
                 request, e.status_code, e.request_id, e.error_code, e.error_msg)
             raise
         return response, True
+
 
 @CodeArtsRepoProject.action_registry.register("open-watermark")
 class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
@@ -165,6 +167,7 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
             raise
         return response, True
 
+
 @CodeArtsRepoProject.filter_registry.register('not-protected')
 class ProtectedBranchFilter(Filter):
     schema = type_schema("protected")
@@ -193,8 +196,8 @@ class ProtectedBranchFilter(Filter):
             # no need to protecte
             if not self.need_create_protected_branches(protected_branches):
                 log.info(
-                    "[filter]-{codehub-project-protected-branches} has protected branches for project_id: [%s], skip.",
-                    project_id)
+                    "[filter]-{codehub-project-protected-branches} has protected branches for"
+                    " project_id: [%s], skip.", project_id)
                 continue
 
             results.append(resource)
@@ -312,10 +315,11 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
             if not has_permission:
                 return response
             log.info(
-                "[actions]-{codehub-project-create-protected-branches} create protected branches fro project_id: [%s] success.",
-                project_id)
+                "[actions]-{codehub-project-create-protected-branches} create protected branches "
+                "for project_id: [%s] success.", project_id)
         except exceptions.ClientRequestException as e:
-            log.error("[actions]-{codehub-project-create-protected-branches} for project_id:[%s] failed.", project_id)
+            log.error("[actions]-{codehub-project-create-protected-branches} for "
+                      "project_id:[%s] failed.", project_id)
             raise
         return response
 
@@ -405,12 +409,12 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
         try:
             response = self.set_project_settings(project_id, list_data_body)
             log.info(
-                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark fro project_id: [%s] success.",
-                project_id)
+                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
+                "for project_id: [%s] success.", project_id)
         except exceptions.ClientRequestException as e:
             log.error(
-                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark for project_id:[%s] failed.",
-                project_id)
+                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
+                "for project_id:[%s] failed.", project_id)
             raise
         return response
 
@@ -432,7 +436,8 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
         except exceptions.ClientRequestException as e:
             if e.status_code == 403:
                 log.warning(
-                    "[actions]-{codehub-project-set-settings} has no permission to set settings protected_branches and watermark with request:[%s]", request)
+                    "[actions]-{codehub-project-set-settings} has no permission to set settings "
+                    "protected_branches and watermark with request:[%s]", request)
                 return {}
             log.error(
                 "[actions]-{codehub-project-set-settings} with request:[%s]"
