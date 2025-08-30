@@ -47,6 +47,7 @@ class WatermarkFilter(Filter):
         """
         results = []
         for resource in resources:
+            time.sleep(1)
             project_id = resource["id"]
             # no permission
             response, has_permission = self.query_project_watermark_status(project_id)
@@ -182,6 +183,7 @@ class ProtectedBranchFilter(Filter):
         """
         results = []
         for resource in resources:
+            time.sleep(1)
             project_id = resource["id"]
             # no permission
             protected_branches, has_permission = self.query_project_protected_branches(project_id)
