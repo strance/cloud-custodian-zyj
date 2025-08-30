@@ -132,7 +132,7 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
             log.info(
                 "[actions]-{codehub-project-open-watermark} open project watermark fro project_id: [%s] success.",
                 project_id)
-        except exceptions.ClientRequestException as e:
+        except exceptions.ClientRequestException:
             log.error("[actions]-{codehub-project-open-watermark} for project_id:[%s] failed.", project_id)
             raise
         return response
@@ -317,7 +317,7 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
             log.info(
                 "[actions]-{codehub-project-create-protected-branches} create protected branches "
                 "for project_id: [%s] success.", project_id)
-        except exceptions.ClientRequestException as e:
+        except exceptions.ClientRequestException:
             log.error("[actions]-{codehub-project-create-protected-branches} for "
                       "project_id:[%s] failed.", project_id)
             raise
@@ -411,7 +411,7 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
             log.info(
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
                 "for project_id: [%s] success.", project_id)
-        except exceptions.ClientRequestException as e:
+        except exceptions.ClientRequestException:
             log.error(
                 "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
                 "for project_id:[%s] failed.", project_id)
