@@ -1,0 +1,16 @@
+policies:
+  - name: CodeArtsRepo-Project-Create-Protected-Branch
+    description: create protected branch for project
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: huaweicloud-periodic
+      xrole: Custodian
+      enable_lts_log: true
+      log_level: INFO
+      schedule: "00 00 00 * * *"
+      schedule_type: Cron
+      cron_tz: "America/Sao_Paulo"
+    actions:
+      - type: create-protected-branches
+    filters:
+      - type: not-protected

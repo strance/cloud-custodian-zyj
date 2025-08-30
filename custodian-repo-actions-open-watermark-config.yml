@@ -1,0 +1,18 @@
+policies:
+  - name: CodeArtsRepo-Project-Open-Watermark
+    description: open watermark for project
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: huaweicloud-periodic
+      xrole: Custodian
+      enable_lts_log: true
+      log_level: INFO
+      schedule: "00 00 00 * * *"
+      schedule_type: Cron
+      cron_tz: "America/Sao_Paulo"
+    actions:
+      - type: open-watermark
+    filters:
+      - type: not-opened
+
+

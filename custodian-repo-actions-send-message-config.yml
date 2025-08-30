@@ -1,0 +1,19 @@
+policies:
+  - name: CodeArtsRepo-Project-Create-Project-Send-Message
+    description: when create project send a message
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: cloudtrace
+      xrole: Custodian
+      enable_lts_log: true
+      log_level: INFO
+      events:
+        - source: "ProjectMan.project"
+          event: "createProject"
+          ids: "resource_id"
+    actions:
+      - type: notify-message
+        topic_urn_list:
+          - urn:smn:sa-brazil-1:080d260abf8026bf2f1bc01ebd36df12:custodian-topic
+        subject: "New Project Need Add Agency."
+        message: "Your domain has create a new project, please add agency for this project. {resource_details}"
