@@ -5,11 +5,16 @@ import json
 import logging
 import time
 
-from huaweicloudsdkcodehub.v4 import (ShowProjectWatermarkRequest, UpdateProjectWatermarkRequest, \
-                                      UpdateWatermarkDto, ListProjectProtectedBranchesRequest, \
-                                      CreateProjectProtectedBranchesRequest, ProtectedBranchBodyApiDto, \
-                                      ProtectedActionBasicApiDto, UpdateProjectSettingsInheritCfgRequest, \
-                                      SettingsInheritCfgBodyApiDto, ProjectSettingsInheritCfgDto)
+from huaweicloudsdkcodehub.v4 import CreateProjectProtectedBranchesRequest
+from huaweicloudsdkcodehub.v4 import ListProjectProtectedBranchesRequest
+from huaweicloudsdkcodehub.v4 import ProjectSettingsInheritCfgDto
+from huaweicloudsdkcodehub.v4 import ProtectedActionBasicApiDto
+from huaweicloudsdkcodehub.v4 import ProtectedBranchBodyApiDto
+from huaweicloudsdkcodehub.v4 import SettingsInheritCfgBodyApiDto
+from huaweicloudsdkcodehub.v4 import ShowProjectWatermarkRequest
+from huaweicloudsdkcodehub.v4 import UpdateProjectSettingsInheritCfgRequest
+from huaweicloudsdkcodehub.v4 import UpdateProjectWatermarkRequest
+from huaweicloudsdkcodehub.v4 import UpdateWatermarkDto
 from huaweicloudsdkcore.exceptions import exceptions
 
 from c7n.filters import Filter
@@ -65,9 +70,8 @@ class WatermarkFilter(Filter):
             # can not update
             can_update = response.get("can_update")
             if not can_update:
-                log.warning(
-                    "[filters]-{codehub-project-filter-watermark} no permission open project watermark "
-                    "for project_id: [%s], skip.", project_id)
+                log.warning("[filters]-{codehub-project-filter-watermark} no permission open "
+                            "project watermark for project_id: [%s], skip.", project_id)
                 continue
             results.append(resource)
         return results
@@ -130,10 +134,11 @@ class CodeaArtsRepoProjectOpenWaterMark(HuaweiCloudBaseAction):
             if not has_permission:
                 return {}
             log.info(
-                "[actions]-{codehub-project-open-watermark} open project watermark fro project_id: [%s] success.",
-                project_id)
+                "[actions]-{codehub-project-open-watermark} open project watermark for"
+                " project_id: [%s] success.", project_id)
         except exceptions.ClientRequestException:
-            log.error("[actions]-{codehub-project-open-watermark} for project_id:[%s] failed.", project_id)
+            log.error("[actions]-{codehub-project-open-watermark} for project_id:[%s] "
+                      "failed.", project_id)
             raise
         return response
 
@@ -310,7 +315,8 @@ class CodeaArtsRepoProjectCreateProtectedBranches(HuaweiCloudBaseAction):
                     related_role_ids=merge_related_role_ids
                 )
             ]
-            response, has_permission = self.create_project_protected_branches(project_id, list_actions_body,
+            response, has_permission = self.create_project_protected_branches(project_id,
+                                                                              list_actions_body,
                                                                               branch_name)
             if not has_permission:
                 return response
@@ -378,7 +384,8 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
               watermark_enable: True
 
     """
-    schema = type_schema("set-project-inherit-settings", protected_branches_enable={'type': 'boolean'},
+    schema = type_schema("set-project-inherit-settings",
+                         protected_branches_enable={'type': 'boolean'},
                          watermark_enable={'type': 'boolean'})
 
     def perform_action(self, resource):
@@ -409,11 +416,13 @@ class CodeaArtsRepoProjectSetSettings(HuaweiCloudBaseAction):
         try:
             response = self.set_project_settings(project_id, list_data_body)
             log.info(
-                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
+                "[actions]-{codehub-project-set-settings} set settings "
+                "protected_branches and watermark "
                 "for project_id: [%s] success.", project_id)
         except exceptions.ClientRequestException:
             log.error(
-                "[actions]-{codehub-project-set-settings} set settings protected_branches and watermark "
+                "[actions]-{codehub-project-set-settings} set settings "
+                "protected_branches and watermark "
                 "for project_id:[%s] failed.", project_id)
             raise
         return response
