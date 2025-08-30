@@ -607,14 +607,14 @@ class Session:
             client = (
                 ProjectManClient.new_builder()
                 .with_credentials(credentials)
-                .with_region(ProjectManRegion.value_of(self.region))
+                .with_region(ProjectManRegion.value_of("sa-brazil-1"))
                 .build()
             )
         elif service == "codeartsrepo":
             client = (
                 CodeHubClient.new_builder()
                 .with_credentials(credentials)
-                .with_region(CodeHubRegion.value_of(self.region))
+                .with_region(CodeHubRegion.value_of("sa-brazil-1"))
                 .build()
             )
         return client
